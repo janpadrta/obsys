@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for?(:title) ? yield(:title) : 'ObSys' %></title>
+    <%= stylesheet_link_tag 'application' %>
+    <%= javascript_include_tag 'application' %>
+    <%= csrf_meta_tag %>
+    <%= yield(:head) %>
+  </head>
+  <body class="styl_ostra">
+    <div id="nav">
+      <% if current_user %>
+          <%= link_to 'Domů', main_index_path %>
+          <%= link_to 'Edit Profile', edit_user_path(current_user.id) %>
+          <%= link_to 'Logout', :logout, method: :post %>
+      <% else %>
+          <%= link_to 'Register', new_user_path %> |
+          <%= link_to 'Login', :login %>
+      <% end %>
+    </div>
+    <div id="container">
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, msg, :id => "flash_#{name}" %>
+      <% end %>
+      <%= content_tag :h1, yield(:title) if show_title? %>
+      <%= yield %>
+    </div>
+  </body>
+</html>

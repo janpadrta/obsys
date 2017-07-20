@@ -1,0 +1,22 @@
+<h1>OBSYS</h1>
+<table>
+  <%= form_tag jump_path do %>
+      <tr>
+        <td><%= text_field_tag :search_name %></td>
+        <td><%= submit_tag 'Hledej' %></td>
+      </tr>
+  <% end %>
+  <tr>
+    <td><%= link_to 'Přehled klientek', clients_path %></td>
+  </tr>
+  <tr>
+    <td><%= link_to 'Seznam značek', branches_path %></td>
+  </tr>
+  <tr>
+    <td><%= link_to 'Seznam objednávek', orders_path %></td>
+  </tr>
+  <tr>
+    <td><%= link_to 'Seznam výrobků', products_path %></td>
+  </tr>
+</table>
+

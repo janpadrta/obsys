@@ -1,0 +1,23 @@
+# == Schema Information
+#
+# Table name: orders
+#
+#  id            :integer          not null, primary key
+#  branch_id     :integer          not null
+#  delivery_date :date
+#  state         :integer          default(1), not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  branch_id: 1
+  delivery_date: 2017-07-07
+  state: 1
+
+two:
+  branch_id: 1
+  delivery_date: 2017-07-07
+  state: 1

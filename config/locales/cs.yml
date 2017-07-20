@@ -1,0 +1,61 @@
+cs:
+  activerecord:
+    models:
+      user: "Uživatel"
+    attributes:
+      user:
+        name: "Jméno"
+        password_confirmation: "Potvrzení hesla"
+        password: "Heslo"
+        login: "Login"
+        email: "Email"
+        current_password: "Stávající heslo"
+        aktivni: "aktivní"
+    errors:
+      attributes:
+        user:
+          name:
+            blank: ""
+          password_confirmation:
+            blank: ""
+            confirmation: "Hesla nesouhlasí."
+          password:
+            confirmation: ""
+            blank:  "Heslo nemůže být prázdné"
+            too_short: "Heslo je příliš krátké"
+          login:
+            taken: ""
+            blank: ""
+            too_short: ""
+          email:
+            taken: ""
+            blank: ""
+            too_short: ""
+            invalid: "Email není platný"
+      template:
+        header: ""
+        body: ""
+
+  best_in_place:
+    yes: "Ano"
+    no: "Ne"
+
+  views:
+    pagination:
+      first: "&laquo; První"
+      last: "Poslední &raquo;"
+      previous: "&lsaquo; Předchozí"
+      next: "Další &rsaquo;"
+      truncate: "&hellip;"
+
+  unauthorized:
+    default: "Základní nepovolený přístup."
+    manage:
+      all: "Nepovolený přístup."
+      app_log: 'Na AppLogy nedovolený přístup'
+    update:
+      priloha: "Upravovat přílohy není povoleno."
+      aktualita: "Upravovat aktuality není povoleno."
+    new:
+      priloha: 'Vkládat přílohy není povoleno.'
+      aktualita: 'Vkládat aktuality není povoleno.'

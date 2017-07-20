@@ -1,0 +1,36 @@
+# == Schema Information
+#
+# Table name: clients
+#
+#  id              :integer          not null, primary key
+#  first_name      :string
+#  last_name       :string           not null
+#  street          :string
+#  street_number   :string
+#  city            :string
+#  postal_code     :string
+#  active          :boolean          default(TRUE)
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  variable_symbol :integer
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  first_name: MyString
+  last_name: MyString
+  street: MyString
+  street_number: MyString
+  city: MyString
+  postal_code: MyString
+  active: false
+
+two:
+  first_name: MyString
+  last_name: MyString
+  street: MyString
+  street_number: MyString
+  city: MyString
+  postal_code: MyString
+  active: false

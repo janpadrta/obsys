@@ -1,0 +1,84 @@
+<p id="notice"><%= notice %></p>
+
+<fieldset class="white">
+  <legend>KLIENT</legend>
+  <table>
+    <tr>
+      <td><strong>Jméno:</strong></td>
+      <td><%= @client.cele_jmeno %></td>
+    </tr>
+    <tr>
+      <td><strong>Adresa:</strong></td>
+      <td><%= @client.adresa %></td>
+    </tr>
+    <tr>
+      <td><strong>Variabilní smybol:</strong></td>
+      <td><%= @client.variable_symbol %></td>
+    </tr>
+    <tr>
+      <td><strong>Aktivní:</strong></td>
+      <td><%= @client.active %></td>
+    </tr>
+  </table>
+</fieldset>
+<fieldset class="red">
+  <legend>Přidej produkt k objednávce</legend>
+  <%= form_for @product do |form| %>
+      <%= form.hidden_field :client_id, value: @client.id %>
+      <div class="field">
+        <%= form.label :order, 'Objednávka' %>
+        <%= form.select :order_id, options_from_collection_for_select(Order.all, :id, :name), id: :product_order_id %>
+      </div>
+
+      <div class="field">
+        <%= form.label :name, 'Název' %>
+        <%= form.text_field :name, id: :product_name %>
+      </div>
+
+      <div class="field">
+        <%= form.label :price, 'Cena za kus' %>
+        <%= form.text_field :price, id: :product_price %>
+      </div>
+
+      <div class="field">
+        <%= form.label :pieces, 'Kusů' %>
+        <%= form.text_field :pieces, id: :product_pieces %>
+      </div>
+
+      <div class="field">
+        <%= form.label :description, 'Popis' %>
+        <%= form.text_field :description, id: :product_description %>
+      </div>
+
+      <div class="actions">
+        <%= form.submit 'Přidej' %>
+      </div>
+  <% end %>
+</fieldset>
+
+<fieldset class="green">
+  <legend>Nákupy</legend>
+  <table>
+    <tr>
+      <th></th>
+    </tr>
+    <% @orders.active.each do |order| %>
+      <tr>
+        <th colspan="3"><%= order.name %></th>
+      </tr>
+        <tr>
+          <th><%=  %></th>
+        </tr>
+        <% order.purchases.includes(:product).patri(@client).each do |purchase| %>
+          <tr>
+            <td><%= purchase.product.name %></td>
+            <td><%= format_currency purchase.product.price %></td>
+            <td><%= format_currency purchase.pieces, 'ks', 0 %></td>
+          </tr>
+        <% end %>
+    <% end %>
+  </table>
+</fieldset>
+
+<%= link_to 'Edit', edit_client_path(@client) %> |
+<%= link_to 'Back', clients_path %>
