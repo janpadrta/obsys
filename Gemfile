@@ -63,3 +63,5 @@ group :test do
   gem 'factory_girl'
   gem 'factory_girl_rails'
 end
+
+gem 'twitter-bootstrap-rails'

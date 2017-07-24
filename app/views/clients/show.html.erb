@@ -1,84 +1,89 @@
-<p id="notice"><%= notice %></p>
+<%- model_class = Client -%>
+<div class="page-header">
+  <h1><%= @client.cele_jmeno %></h1>
+</div>
 
-<fieldset class="white">
-  <legend>KLIENT</legend>
-  <table>
-    <tr>
-      <td><strong>Jméno:</strong></td>
-      <td><%= @client.cele_jmeno %></td>
-    </tr>
-    <tr>
-      <td><strong>Adresa:</strong></td>
-      <td><%= @client.adresa %></td>
-    </tr>
-    <tr>
-      <td><strong>Variabilní smybol:</strong></td>
-      <td><%= @client.variable_symbol %></td>
-    </tr>
-    <tr>
-      <td><strong>Aktivní:</strong></td>
-      <td><%= @client.active %></td>
-    </tr>
-  </table>
-</fieldset>
+<dl class="dl-horizontal">
+  <dt><strong>Adresa:</strong></dt><dd><%= @client.adresa %></dd>
+  <dt><strong>Variabilní symbol:</strong></dt><dd><%= @client.variable_symbol %></dd>
+  <dt><strong>Aktivní:</strong></dt><dd><%= @client.active %></dd>
+</dl>
+
 <fieldset class="red">
-  <legend>Přidej produkt k objednávce</legend>
-  <%= form_for @product do |form| %>
-      <%= form.hidden_field :client_id, value: @client.id %>
-      <div class="field">
-        <%= form.label :order, 'Objednávka' %>
-        <%= form.select :order_id, options_from_collection_for_select(Order.all, :id, :name), id: :product_order_id %>
-      </div>
+  <dl class="dl-horizontal">
+    <legend>Přidej produkt k objednávce</legend>
+    <%= form_for @product do |form| %>
+        <%= form.hidden_field :client_id, value: @client.id %>
+        <dt><strong><%= form.label :order, 'Objednávka' %></strong></dt>
+        <dd><%= form.select :order_id, options_from_collection_for_select(Order.all, :id, :name), id: :product_order_id %></dd>
+        <dt><strong><%= form.label :name, 'Název' %></strong></dt>
+        <dd><%= form.text_field :name, id: :product_name %></dd>
+        <dt><strong><%= form.label :price, 'Cena za kus' %></strong></dt>
+        <dd><%= form.text_field :price, id: :product_price %></dd>
+        <dt><strong><%= form.label :pieces, 'Kusů' %></strong></dt>
+        <dd><%= form.text_field :pieces, id: :product_pieces %></dd>
+        <dt><strong><%= form.label :description, 'Popis' %></strong></dt>
+        <dd><%= form.text_field :description, id: :product_description %></dd>
 
-      <div class="field">
-        <%= form.label :name, 'Název' %>
-        <%= form.text_field :name, id: :product_name %>
-      </div>
-
-      <div class="field">
-        <%= form.label :price, 'Cena za kus' %>
-        <%= form.text_field :price, id: :product_price %>
-      </div>
-
-      <div class="field">
-        <%= form.label :pieces, 'Kusů' %>
-        <%= form.text_field :pieces, id: :product_pieces %>
-      </div>
-
-      <div class="field">
-        <%= form.label :description, 'Popis' %>
-        <%= form.text_field :description, id: :product_description %>
-      </div>
-
-      <div class="actions">
-        <%= form.submit 'Přidej' %>
-      </div>
-  <% end %>
+        <dt><strong><%= form.submit 'Přidej', class: 'btn btn-success' %></strong></dt>
+    <% end %>
+  </dl>
 </fieldset>
 
 <fieldset class="green">
-  <legend>Nákupy</legend>
-  <table>
-    <tr>
-      <th></th>
-    </tr>
-    <% @orders.active.each do |order| %>
+  <legend>Aktivní objednávky</legend>
+  <% @orders.active.each do |order| %>
+    <table class="span3">
       <tr>
-        <th colspan="3"><%= order.name %></th>
+        <th colspan="3"><%= link_to order.name, order %></th>
       </tr>
-        <tr>
-          <th><%=  %></th>
-        </tr>
-        <% order.purchases.includes(:product).patri(@client).each do |purchase| %>
+      <tr>
+        <th colspan="2">Celkem:</th>
+        <th><%= format_currency @client.order_value(order) %></th>
+      </tr>
+      <% order.purchases.includes(:product).patri(@client).each do |purchase| %>
           <tr>
             <td><%= purchase.product.name %></td>
             <td><%= format_currency purchase.product.price %></td>
             <td><%= format_currency purchase.pieces, 'ks', 0 %></td>
+            <td><%= link_to 'X', purchase_path(purchase),
+                            method: 'delete',
+                            data: {:confirm => 'Opravdu smazat?'},
+                            :class => 'btn-xs btn-danger' %>
+            </td>
           </tr>
-        <% end %>
-    <% end %>
-  </table>
+      <% end %>
+    </table>
+  <% end %>
 </fieldset>
 
-<%= link_to 'Edit', edit_client_path(@client) %> |
-<%= link_to 'Back', clients_path %>
+<fieldset class="light_green">
+  <legend>Objednané objednávky</legend>
+  <% @orders.ordered.each do |order| %>
+    <%= render partial: 'order_purchases', locals: {order: order} %>
+  <% end %>
+</fieldset>
+
+<fieldset class="light_red">
+  <legend>Doručené objednávky</legend>
+  <% @orders.delivered.each do |order| %>
+    <%= render partial: 'order_purchases', locals: {order: order} %>
+  <% end %>
+</fieldset>
+
+<fieldset class="grey">
+  <legend>Ukončené objednávky</legend>
+  <% @orders.closed.each do |order| %>
+    <%= render partial: 'order_purchases', locals: {order: order} %>
+  <% end %>
+</fieldset>
+
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              clients_path, :class => 'btn btn-info'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_client_path(@client), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              client_path(@client),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

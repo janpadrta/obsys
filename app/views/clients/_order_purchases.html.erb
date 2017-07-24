@@ -1,0 +1,16 @@
+<table class="span3">
+  <tr>
+    <th colspan="3"><%= link_to order.name, order %></th>
+  </tr>
+  <tr>
+    <th colspan="2">Celkem:</th>
+    <th><%= format_currency @client.order_value(order) %></th>
+  </tr>
+  <% order.purchases.includes(:product).patri(@client).each do |purchase| %>
+      <tr>
+        <td><%= purchase.product.name %></td>
+        <td><%= format_currency purchase.product.price %></td>
+        <td><%= format_currency purchase.pieces, 'ks', 0 %></td>
+      </tr>
+  <% end %>
+</table>

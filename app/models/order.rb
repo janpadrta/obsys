@@ -30,6 +30,14 @@ class Order < ApplicationRecord
   scope :closed, -> { where(state: 5) }
 
   def name
-    "#{branch.name} - #{delivery_date.strftime('%d.%m.%Y')} - #{STATE[state]}"
+    "#{branch.name} - #{delivery_date.strftime('%d.%m.%Y')}"
+  end
+
+  def rekni_stav
+    STATE[state]
+  end
+
+  def cena_celkem
+    purchases.includes(:product).map{|pur| pur.product.price * pur.pieces}.sum
   end
 end

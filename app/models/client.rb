@@ -41,4 +41,8 @@ class Client < ApplicationRecord
   def adresa
     "#{street} #{street_number}, #{postal_code} #{city}"
   end
+
+  def order_value(ord)
+    ord.purchases.patri(self).includes(:product).map{|pur| pur.product.price * pur.pieces}.sum
+  end
 end

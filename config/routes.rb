@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   resources :products
   resources :orders
   resources :branches
+  resources :purchases, only: [:destroy]
 
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout
