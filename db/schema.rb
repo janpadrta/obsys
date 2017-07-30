@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170719220034) do
+ActiveRecord::Schema.define(version: 20170724224706) do
 
   create_table "branches", force: :cascade do |t|
     t.string "name", null: false
@@ -35,6 +35,15 @@ ActiveRecord::Schema.define(version: 20170719220034) do
     t.integer "branch_id", null: false
     t.date "delivery_date"
     t.integer "state", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "payments", force: :cascade do |t|
+    t.integer "client_id"
+    t.integer "order_id"
+    t.decimal "amount"
+    t.date "pay_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

@@ -4,13 +4,14 @@ Rails.application.routes.draw do
 
   root :to => 'main#index'
 
+  resources :branches
+  resources :clients
+  resources :orders
+  resources :payments
+  resources :products
+  resources :purchases, only: [:destroy]
   resources :users
   resources :user_sessions
-  resources :clients
-  resources :products
-  resources :orders
-  resources :branches
-  resources :purchases, only: [:destroy]
 
   get 'login' => 'user_sessions#new', :as => :login
   post 'logout' => 'user_sessions#destroy', :as => :logout

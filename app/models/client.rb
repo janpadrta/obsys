@@ -19,6 +19,7 @@ class Client < ApplicationRecord
   has_many :purchases
   has_many :orders, through: :purchases
   has_many :products, through: :purchases
+  has_many :payments
 
   before_create :pred_vytvorenim
 
@@ -44,5 +45,16 @@ class Client < ApplicationRecord
 
   def order_value(ord)
     ord.purchases.patri(self).includes(:product).map{|pur| pur.product.price * pur.pieces}.sum
+  end
+
+  def nedoplacene_objednavky
+    ret = {}
+    orders.includes(:payments, :purchases).each do |ord|
+      hodnota = self.order_value(ord)
+      hodnota -= ord.payments.patri(self).sum(:amount)
+      next if hodnota < 0.0
+      ret[ord] = hodnota
+    end
+    ret
   end
 end

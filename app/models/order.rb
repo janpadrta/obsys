@@ -15,6 +15,7 @@ class Order < ApplicationRecord
   has_many :products, through: :purchases
   has_many :clients, through: :purchases
   belongs_to :branch
+  has_many :payments
 
   STATE = {
       1 => 'nová',

@@ -5,22 +5,20 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
-      <th><%= model_class.human_attribute_name(:branch_id) %></th>
-      <th><%= model_class.human_attribute_name(:delivery_date) %></th>
-      <th><%= model_class.human_attribute_name(:state) %></th>
-      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%= model_class.human_attribute_name(:označení) %></th>
+      <th><%= model_class.human_attribute_name(:značka) %></th>
+      <th><%= model_class.human_attribute_name(:datum_doručení) %></th>
+      <th><%= model_class.human_attribute_name(:stav) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @orders.each do |order| %>
       <tr>
-        <td><%= link_to order.id, order_path(order) %></td>
-        <td><%= order.branch_id %></td>
-        <td><%= order.delivery_date %></td>
-        <td><%= order.state %></td>
-        <td><%=l order.created_at %></td>
+        <td><%= link_to order.name, order_path(order) %></td>
+        <td><%= link_to order.branch.name, order.branch %></td>
+        <td><%= format_date order.delivery_date %></td>
+        <td><%= order.rekni_stav %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
                       order_path(order), :class => 'btn btn-default btn-xs' %>

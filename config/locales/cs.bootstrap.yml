@@ -1,0 +1,23 @@
+# Sample localization file for English. Add more files in this directory for other locales.
+# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
+
+cs:
+  breadcrumbs:
+    application:
+      root: "Index"
+    pages:
+      pages: "Stránky"
+  helpers:
+    actions: "Akce"
+    links:
+      back: "Zpět"
+      cancel: "Zruš"
+      confirm: "Opravdu?"
+      destroy: "Smaž"
+      new: "Nový"
+      edit: "Uprav"
+    titles:
+      edit: "Uprav %{model}"
+      save: "Ulož %{model}"
+      new: "Nový %{model}"
+      delete: "Smaž %{model}"

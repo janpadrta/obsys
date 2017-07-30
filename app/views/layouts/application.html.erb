@@ -26,9 +26,18 @@
             <% if current_user %>
                 <li><%= link_to 'Domů', main_index_path %></li>
                 <li><%= link_to 'Edit Profile', edit_user_path(current_user.id) %></li>
+                <li><%= link_to 'Klientky', clients_path %></li>
+                <li><%= link_to 'Značky', branches_path %></li>
+                <li><%= link_to 'Objednávky', orders_path %></li>
+                <li><%= link_to 'Výrobky', products_path %></li>
+                <li><%= link_to 'Platby', payments_path %></li>
                 <li><%= link_to 'Logout', :logout, method: :post %></li>
+                <li>
+                  <%= form_tag jump_path do %>
+                    <%= text_field_tag :search_name %><%= submit_tag 'Hledej' %>
+                  <% end %>
+                </li>
             <% else %>
-                <li><%= link_to 'Register', new_user_path %></li>
                 <li><%= link_to 'Login', :login %></li>
             <% end %>
           </ul>

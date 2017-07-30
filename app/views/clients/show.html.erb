@@ -31,57 +31,107 @@
 </fieldset>
 
 <fieldset class="green">
-  <legend>Aktivní objednávky</legend>
-  <% @orders.active.each do |order| %>
-    <table class="span3">
-      <tr>
-        <th colspan="3"><%= link_to order.name, order %></th>
-      </tr>
-      <tr>
-        <th colspan="2">Celkem:</th>
-        <th><%= format_currency @client.order_value(order) %></th>
-      </tr>
-      <% order.purchases.includes(:product).patri(@client).each do |purchase| %>
-          <tr>
-            <td><%= purchase.product.name %></td>
-            <td><%= format_currency purchase.product.price %></td>
-            <td><%= format_currency purchase.pieces, 'ks', 0 %></td>
-            <td><%= link_to 'X', purchase_path(purchase),
-                            method: 'delete',
-                            data: {:confirm => 'Opravdu smazat?'},
-                            :class => 'btn-xs btn-danger' %>
-            </td>
-          </tr>
+  <dl class="dl-horizontal">
+    <legend>Aktivní objednávky</legend>
+    <% @orders.active.each do |order| %>
+      <table class="span3">
+        <tr>
+          <th colspan="3"><%= link_to order.name, order %></th>
+        </tr>
+        <tr>
+          <th colspan="2">Celkem:</th>
+          <th><%= format_currency @client.order_value(order) %></th>
+        </tr>
+        <% order.purchases.includes(:product).patri(@client).each do |purchase| %>
+            <tr>
+              <td><%= purchase.product.name %></td>
+              <td><%= format_currency purchase.product.price %></td>
+              <td><%= format_currency purchase.pieces, 'ks', 0 %></td>
+              <td><%= link_to 'X', purchase_path(purchase),
+                              method: 'delete',
+                              data: {:confirm => 'Opravdu smazat?'},
+                              :class => 'btn-xs btn-danger' %>
+              </td>
+            </tr>
+        <% end %>
+      </table>
+    <% end %>
+  </dl>
+</fieldset>
+
+<fieldset class="yellow">
+  <dl class="dl-horizontal">
+    <legend>Platby</legend>
+    <table class="span10">
+      <%= form_for Payment.new do |fp| %>
+          <%= fp.hidden_field(:client_id, value: @client.id) %>
+        <tr>
+          <td colspan="3">
+            <%= fp.text_field(:amount) %>
+            <%= fp.date_select(:pay_date) %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="3">
+            <%= fp.select(:order_id, options_from_collection_for_select(@client.nedoplacene_objednavky.map{|k,v| [k.id, "#{k.name} - #{v}"]}, :first, :last)) %>
+            <%= fp.submit('Ulož') %>
+          </td>
+        </tr>
       <% end %>
     </table>
-  <% end %>
+    <table>
+      <tr>
+        <th>Datum</th>
+        <th>Částka</th>
+        <th></th>
+      </tr>
+      <% @client.payments.each do |payment| %>
+        <tr>
+          <td><%= format_date payment.pay_date %></td>
+          <td><%= format_currency payment.amount %></td>
+          <td>
+            <%= link_to t('.edit'), edit_payment_path(payment), :class => 'btn-xs btn-default' %>
+            <%= link_to t('.destroy'),
+                        payment_path(payment),
+                        :method => 'delete',
+                        :data => { :confirm => t('.confirm') },
+                        :class => 'btn-xs btn-danger' %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </dl>
 </fieldset>
 
 <fieldset class="light_green">
-  <legend>Objednané objednávky</legend>
-  <% @orders.ordered.each do |order| %>
-    <%= render partial: 'order_purchases', locals: {order: order} %>
-  <% end %>
+  <dl class="dl-horizontal">
+    <legend>Objednané objednávky</legend>
+    <% @orders.ordered.each do |order| %>
+      <%= render partial: 'order_purchases', locals: {order: order} %>
+    <% end %>
+  </dl>
 </fieldset>
 
 <fieldset class="light_red">
-  <legend>Doručené objednávky</legend>
-  <% @orders.delivered.each do |order| %>
-    <%= render partial: 'order_purchases', locals: {order: order} %>
-  <% end %>
+  <dl class="dl-horizontal">
+    <legend>Doručené objednávky</legend>
+    <% @orders.delivered.each do |order| %>
+      <%= render partial: 'order_purchases', locals: {order: order} %>
+    <% end %>
+  </dl>
 </fieldset>
 
 <fieldset class="grey">
-  <legend>Ukončené objednávky</legend>
-  <% @orders.closed.each do |order| %>
-    <%= render partial: 'order_purchases', locals: {order: order} %>
-  <% end %>
+  <dl class="dl-horizontal">
+    <legend>Ukončené objednávky</legend>
+    <% @orders.closed.each do |order| %>
+      <%= render partial: 'order_purchases', locals: {order: order} %>
+    <% end %>
+  </dl>
 </fieldset>
 
-<%= link_to t('.back', :default => t("helpers.links.back")),
-              clients_path, :class => 'btn btn-info'  %>
-<%= link_to t('.edit', :default => t("helpers.links.edit")),
-              edit_client_path(@client), :class => 'btn btn-default' %>
+<%= link_to t('.back', :default => t("helpers.links.back")), clients_path, :class => 'btn btn-info'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")), edit_client_path(@client), :class => 'btn btn-default' %>
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               client_path(@client),
               :method => 'delete',
